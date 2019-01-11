@@ -73,6 +73,18 @@
                 <div class="title m-b-md">
                     SQLApp
                 </div>
+
+                <table>
+                    @foreach($students as $student)
+                    <tr>
+                        <td>{{ $student->id }}</td>
+                        <td>{{ $student->firstName }}</td>
+                        <td>{{ $student->lastName }}</td>
+                        <td>{{ $student->email }}</td>
+                        <td>{{ $student->acronym }}</td>
+                    </tr>
+                    @endforeach
+                </table>
             </div>
         </div>
     </body>
