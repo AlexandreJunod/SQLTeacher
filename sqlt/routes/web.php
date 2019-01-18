@@ -15,4 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/tempsqlapp', 'sqlappController@index');
+Route::get('/persons', 'personsController@index');
+Route::get('/exercises', 'exercisesController@index');
+Route::get('/management', 'managementController@index');

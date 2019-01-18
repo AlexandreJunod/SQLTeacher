@@ -73,15 +73,21 @@
                 <div class="title m-b-md">
                     SQLApp
                 </div>
-
                 <table>
-                    @foreach($students as $student)
+                    <th>
+                        id
+                    </th>
+                    <th>
+                        statement
+                    </th>
+                    <th>
+                        description
+                    </th>
+                    @foreach($dataexercises as $dataexercise)
                     <tr>
-                        <td>{{ $student->id }}</td>
-                        <td>{{ $student->firstName }}</td>
-                        <td>{{ $student->lastName }}</td>
-                        <td>{{ $student->email }}</td>
-                        <td>{{ $student->acronym }}</td>
+                        <td>{{ $dataexercise->id }}</td>
+                        <td>{{ $dataexercise->statement }}</td>
+                        <td>{{ $dataexercise->description }}</td>
                     </tr>
                     @endforeach
                 </table>
