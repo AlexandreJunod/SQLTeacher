@@ -61,6 +61,14 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+
+            table {
+                border-collapse: collapse;
+            }
+
+            table, th, td {
+                border: 1px solid black;
+            }
         </style>
     </head>
     <body>
@@ -70,27 +78,41 @@
             </div>
 
             <div class="content">
-                <div class="title m-b-md">
-                    SQLApp
-                </div>
-                <table>
+                @foreach($exercises as $exercise)
+                    <h2>{{ $exercise->description }}</h2>
+                    <table>
                     <tr>
-                        <th>description</th>
+                        <th>N°</th>
+                        <th>Question</th>
                     </tr>
-                    @foreach($exercises as $exercise)
-                        <tr>
-                            <td>{{ $exercise->description }}</td>
-                        </tr>
-                        <tr>
-                            <th>questions</th>
-                        </tr>
                         @foreach($exercise->querie as $querie)
                             <tr>
-                                <td>{{ $querie->id }}</td>
+                                <td>{{ $querie->order }}</td>
+                                <td>{{ $querie->formulation }}</td>
                             </tr>
                         @endforeach
-                    @endforeach
-                </table>
+                    </table>
+                @endforeach
+                <h2>Soumettre une réponse</h2>
+                <table>
+                    <form method="post" action="/exercises/answer">
+                    @csrf
+                    <tr>
+                        <td>Acronyme</td>
+                        <td><input type="text" name="acronym" required></td>
+                    </tr>
+                    <tr>
+                        <td>Question</td>
+                        <td><input type="number" name="question" required></td>
+                    </tr>
+                    <tr>
+                        <td>Réponse</td>
+                        <td><textarea name="answer" rows="20" cols="200" required></textarea></td>
+                    </tr>
+                    <tr>
+                        <td><button name="sendAnswer">Ok</button></td>
+                    </tr>
+                </form>
             </div>
         </div>
     </body>
