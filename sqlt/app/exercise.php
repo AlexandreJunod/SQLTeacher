@@ -6,5 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class exercise extends Model
 {
-    //
+    public function querie()
+    {
+        return $this->hasMany('App\querie');
+    }
 }

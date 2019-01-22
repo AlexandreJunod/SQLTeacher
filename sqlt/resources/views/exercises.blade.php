@@ -74,21 +74,21 @@
                     SQLApp
                 </div>
                 <table>
-                    <th>
-                        id
-                    </th>
-                    <th>
-                        statement
-                    </th>
-                    <th>
-                        description
-                    </th>
-                    @foreach($dataexercises as $dataexercise)
                     <tr>
-                        <td>{{ $dataexercise->id }}</td>
-                        <td>{{ $dataexercise->statement }}</td>
-                        <td>{{ $dataexercise->description }}</td>
+                        <th>description</th>
                     </tr>
+                    @foreach($exercises as $exercise)
+                        <tr>
+                            <td>{{ $exercise->description }}</td>
+                        </tr>
+                        <tr>
+                            <th>questions</th>
+                        </tr>
+                        @foreach($exercise->querie as $querie)
+                            <tr>
+                                <td>{{ $querie->id }}</td>
+                            </tr>
+                        @endforeach
                     @endforeach
                 </table>
             </div>
