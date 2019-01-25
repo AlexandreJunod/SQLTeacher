@@ -12,9 +12,9 @@ class exercisesController extends Controller
 {
     public function index(){
         $exercises = exercise::all();
-        // $scores = score::all();
-        $queries = querie::all();
-        return view('exercises')->with('exercises', $exercises)->with('queries', $queries);
+        $scores = score::with(['People', 'querie'])->get();
+        dd($scores);
+        return view('exercises')->with('exercises', $exercises)->with('scores', $scores);
     }
 
     public function correct(Request $request)

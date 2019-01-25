@@ -8,8 +8,12 @@ class score extends Model
 {
     public $timestamps = false;
 
-    // public function querie()
-    // {
-    //     return $this->belongsTo('App\querie', 'querie_id');
-    // }
+    public function People()
+    {
+        return $this->belongsTo('App\People');
+    }
+    public function querie()
+    {
+        return $this->belongsTo('App\querie');
+    }
 }

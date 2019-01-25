@@ -117,23 +117,11 @@
                 <h2>Résultats</h2>
                 <table>
                     <th>Personne</th>
-                    @foreach ($queries as $querie)
-                        <th>{{ $querie->order }}</th>
-                    @endforeach
-                    @foreach ($queries as $querie)
-                        @foreach ($querie->score as $score)
-                            <tr>
-                                <td>{{ $score->people_id }}</td>
-                                {{-- ->distinct($score->people_id)->count('people_id') --}}
-                            </tr>
+                    @foreach($scores as $score)
+                        @foreach($score->querie_people as $querie_people)
+                            <th>{{ $querie_people->email }}</th>
                         @endforeach
                     @endforeach
-                    <tr>
-
-                    </tr>
-                    {{-- @foreach($scores as $score)
-                        <th>{{ $score->querie->order }}a,</th>
-                    @endforeach --}}
                 </table>
             </div>
         </div>
