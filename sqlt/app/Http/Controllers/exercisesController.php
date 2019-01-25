@@ -12,7 +12,9 @@ class exercisesController extends Controller
 {
     public function index(){
         $exercises = exercise::all();
-        return view('exercises')->with('exercises', $exercises);
+        // $scores = score::all();
+        $queries = querie::all();
+        return view('exercises')->with('exercises', $exercises)->with('queries', $queries);
     }
 
     public function correct(Request $request)
@@ -21,13 +23,11 @@ class exercisesController extends Controller
         foreach ($acronyms as $acronym)
         {
             $score = new score;
-            $score->nbattempts = '77';
-            $score->success = '0';
-            $score->student_id = $acronym->id;
+            $score->success = '1';
+            $score->people_id = $acronym->id;
             $score->querie_id = $request->question;
             $score->save();
-            //new score('1','0',$acronym->id,$request->question);
-
         }
+        return redirect('exercises');
     }
 }
