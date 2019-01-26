@@ -13,7 +13,7 @@ class exercisesController extends Controller
     public function index(){
         $exercises = exercise::all();
         $scores = score::with(['People', 'querie'])->get();
-        dd($scores);
+        //dd($scores);
         return view('exercises')->with('exercises', $exercises)->with('scores', $scores);
     }
 

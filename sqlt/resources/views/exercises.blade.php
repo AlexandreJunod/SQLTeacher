@@ -116,11 +116,23 @@
                 </table>
                 <h2>Résultats</h2>
                 <table>
-                    <th>Personne</th>
+                    <th>Ordre</th>
+                    <th>Prenom</th>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Résultat</th>
                     @foreach($scores as $score)
-                        @foreach($score->querie_people as $querie_people)
-                            <th>{{ $querie_people->email }}</th>
-                        @endforeach
+                    <tr>
+                        <td>{{ $score->querie->order }}</td>
+                        <td>{{ $score->people->firstname }}</td>
+                        <td>{{ $score->people->lastname }}</td>
+                        <td>{{ $score->people->email }}</td>
+                        @if($score->success)
+                            <td>Reussi</td>
+                        @else
+                            <td>Raté</td>
+                        @endif
+                    </tr>
                     @endforeach
                 </table>
             </div>

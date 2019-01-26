@@ -12,6 +12,7 @@ class score extends Model
     {
         return $this->belongsTo('App\People');
     }
+    
     public function querie()
     {
         return $this->belongsTo('App\querie');
