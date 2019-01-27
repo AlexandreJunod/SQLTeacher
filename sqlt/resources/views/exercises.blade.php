@@ -116,22 +116,28 @@
                 </table>
                 <h2>Résultats</h2>
                 <table>
-                    <th>Ordre</th>
                     <th>Prenom</th>
                     <th>Nom</th>
-                    <th>Email</th>
-                    <th>Résultat</th>
-                    @foreach($scores as $score)
+                    @foreach($exercise->querie as $querie)
+                        <th>{{ $querie->order }}</th>
+                    @endforeach
+                    @foreach($peoples as $people) <!-- Select every person on the DB -->
                     <tr>
-                        <td>{{ $score->querie->order }}</td>
-                        <td>{{ $score->people->firstname }}</td>
-                        <td>{{ $score->people->lastname }}</td>
-                        <td>{{ $score->people->email }}</td>
-                        @if($score->success)
-                            <td>Reussi</td>
-                        @else
-                            <td>Raté</td>
-                        @endif
+                        <td>{{ $people->firstname }}</td>
+                        <td>{{ $people->lastname }}</td>
+                        @foreach($scores as $score) <!-- Select all the scores -->
+                            @if($people->email == $score->people->email) <!-- Select the score of one person -->
+                                @foreach($exercise->querie as $querie) <!-- Get the number of questions -->
+                                    @if($querie->order == $score->querie->order) <!-- Select one question  -->
+                                        @if($score->success)
+                                            <td><span class="successful" style="background-color:lawngreen">{{ $score->attempts }}</span></td>
+                                        @else
+                                            <td><span class="Failed" style="background-color:tomato">{{ $score->attempts }}</span></td>
+                                        @endif
+                                    @endif
+                                @endforeach
+                            @endif
+                        @endforeach
                     </tr>
                     @endforeach
                 </table>
