@@ -16,8 +16,7 @@
                 color: #636b6f;
                 font-family: 'Nunito', sans-serif;
                 font-weight: 200;
-                height: 100vh;
-                margin: 0;
+                margin: 50px;
             }
 
             .full-height {
@@ -68,6 +67,8 @@
 
             table, th, td {
                 border: 1px solid black;
+                color: black;
+                font-size: 18px;
             }
         </style>
     </head>
@@ -80,6 +81,7 @@
             <div class="content">
                 @foreach($exercises as $exercise)
                     <h2>{{ $exercise->description }}</h2>
+                    <p style="color:mediumblue;">Création de la table : {{ $exercise->statement }}</p>
                     <table>
                     <tr>
                         <th>N°</th>
@@ -114,10 +116,14 @@
                     </tr>
                     </form>
                 </table>
+                @if(isset($error))
+                    <h2>{{ $error }}</h2>
+                @endif
                 <h2>Résultats</h2>
                 <table>
                     <th>Prenom</th>
                     <th>Nom</th>
+                    <th>acronyme</th>
                     @foreach($exercise->querie as $querie)
                         <th>{{ $querie->order }}</th>
                     @endforeach
@@ -125,6 +131,7 @@
                     <tr>
                         <td>{{ $people->firstname }}</td>
                         <td>{{ $people->lastname }}</td>
+                        <td>{{ $people->acronym }}</td>
                         @foreach($scores as $score) <!-- Select all the scores -->
                             @if($people->email == $score->people->email) <!-- Select the score of one person -->
                                 @foreach($exercise->querie as $querie) <!-- Get the number of questions -->
