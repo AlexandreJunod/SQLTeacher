@@ -17,21 +17,23 @@ INSERT INTO `SQLTeacher`.`people`(`firstName`, `lastName`, `email`, `acronym`, `
 INSERT INTO `SQLTeacher`.`people`(`firstName`, `lastName`, `email`, `acronym`, `classe_id`, `role_id`) VALUES ('Miguel', 'SOARES', 'Miguel.SOARES@cpnv.ch', 'MSS', '1', '1');
 INSERT INTO `SQLTeacher`.`people`(`firstName`, `lastName`, `email`, `acronym`, `classe_id`, `role_id`) VALUES ('Johnny', 'VAVA-JARAMILLO', 'Johnny.VACA-JARAMILLO@cpnv.ch', 'JVO', '1', '1');
 
-INSERT INTO `SQLTeacher`.`exercises` (`statement`, `description`) VALUES ('create table tutorials_tbl(tutorial_id INT NOT NULL AUTO_INCREMENT,tutorial_title VARCHAR(100) NOT NULL,tutorial_author VARCHAR(40) NOT NULL,submission_date DATE,PRIMARY KEY ( tutorial_id ));', 'Tutorial table');
+INSERT INTO `SQLTeacher`.`exercises` (`statement`, `description`) VALUES ("CREATE TABLE tutorials_tbl(id INT NOT NULL AUTO_INCREMENT,title VARCHAR(100) NOT NULL,author VARCHAR(40) NOT NULL,PRIMARY KEY ( id ));
+INSERT INTO `sqlteacher`.`tutorials_tbl` (`title`, `author`) VALUES('Examen', 'Enseignant');
+INSERT INTO `sqlteacher`.`tutorials_tbl` (`title`, `author`) VALUES('Test', 'Elève');", 'Table test');
 
-INSERT INTO `SQLTeacher`.`participants` (`classe_id`, `exercice_id`) VALUES ('1', '1');
+INSERT INTO `SQLTeacher`.`participants` (`classe_id`, `exercise_id`) VALUES ('1', '1');
 
 INSERT INTO `SQLTeacher`.`queries` (`statement`, `formulation`, `order`, `exercise_id`) VALUES ('SELECT * FROM tutorials_tbl', 'Select all the tables', '1', '1');
-INSERT INTO `SQLTeacher`.`queries` (`statement`, `formulation`, `order`, `exercise_id`) VALUES ('SELECT tutorial_id FROM tutorials_tbl', 'Select the tutorial id', '2', '1');
-INSERT INTO `SQLTeacher`.`queries` (`statement`, `formulation`, `order`, `exercise_id`) VALUES ('SELECT tutorial_title FROM tutorials_tbl', 'Select the tutorial title', '3', '1');
-INSERT INTO `SQLTeacher`.`queries` (`statement`, `formulation`, `order`, `exercise_id`) VALUES ('SELECT tutorial_author FROM tutorials_tbl', 'Select the tutorial author', '4', '1');
+INSERT INTO `SQLTeacher`.`queries` (`statement`, `formulation`, `order`, `exercise_id`) VALUES ('SELECT id FROM tutorials_tbl', 'Select the tutorial id', '2', '1');
+INSERT INTO `SQLTeacher`.`queries` (`statement`, `formulation`, `order`, `exercise_id`) VALUES ('SELECT title FROM tutorials_tbl', 'Select the tutorial title', '3', '1');
+INSERT INTO `SQLTeacher`.`queries` (`statement`, `formulation`, `order`, `exercise_id`) VALUES ('SELECT author FROM tutorials_tbl', 'Select the tutorial author', '4', '1');
 
-INSERT INTO `SQLTeacher`.`scores` (`nbattempts`, `success`, `student_id`, `querie_id`) VALUES ('13', '1', '1', '1');
-INSERT INTO `SQLTeacher`.`scores` (`nbattempts`, `success`, `student_id`, `querie_id`) VALUES ('4', '1', '1', '2');
-INSERT INTO `SQLTeacher`.`scores` (`nbattempts`, `success`, `student_id`, `querie_id`) VALUES ('27', '0', '1', '3');
-INSERT INTO `SQLTeacher`.`scores` (`nbattempts`, `success`, `student_id`, `querie_id`) VALUES ('1', '1', '2', '1');
-INSERT INTO `SQLTeacher`.`scores` (`nbattempts`, `success`, `student_id`, `querie_id`) VALUES ('2', '0', '3', '1');
-INSERT INTO `SQLTeacher`.`scores` (`nbattempts`, `success`, `student_id`, `querie_id`) VALUES ('3', '1', '2', '2');
-INSERT INTO `SQLTeacher`.`scores` (`nbattempts`, `success`, `student_id`, `querie_id`) VALUES ('2', '1', '2', '3');
-INSERT INTO `SQLTeacher`.`scores` (`nbattempts`, `success`, `student_id`, `querie_id`) VALUES ('3', '1', '4', '1');
-INSERT INTO `SQLTeacher`.`scores` (`nbattempts`, `success`, `student_id`, `querie_id`) VALUES ('5', '0', '4', '2');
+INSERT INTO `SQLTeacher`.`scores` (`attempts`, `success`, `people_id`, `querie_id`) VALUES ('13', '1', '1', '1');
+INSERT INTO `SQLTeacher`.`scores` (`attempts`, `success`, `people_id`, `querie_id`) VALUES ('4', '1', '1', '2');
+INSERT INTO `SQLTeacher`.`scores` (`attempts`, `success`, `people_id`, `querie_id`) VALUES ('27', '0', '1', '3');
+INSERT INTO `SQLTeacher`.`scores` (`attempts`, `success`, `people_id`, `querie_id`) VALUES ('1', '1', '2', '1');
+INSERT INTO `SQLTeacher`.`scores` (`attempts`, `success`, `people_id`, `querie_id`) VALUES ('2', '0', '3', '1');
+INSERT INTO `SQLTeacher`.`scores` (`attempts`, `success`, `people_id`, `querie_id`) VALUES ('3', '1', '2', '2');
+INSERT INTO `SQLTeacher`.`scores` (`attempts`, `success`, `people_id`, `querie_id`) VALUES ('2', '1', '2', '3');
+INSERT INTO `SQLTeacher`.`scores` (`attempts`, `success`, `people_id`, `querie_id`) VALUES ('3', '1', '4', '1');
+INSERT INTO `SQLTeacher`.`scores` (`attempts`, `success`, `people_id`, `querie_id`) VALUES ('5', '0', '4', '2');

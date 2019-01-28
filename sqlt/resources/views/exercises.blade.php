@@ -96,6 +96,7 @@
                     </table>
                 @endforeach
                 <h2>Soumettre une réponse</h2>
+                <h3>{{Session::get('Error')}}</h3> <!-- Show error msg -->
                 <table>
                     <form method="post" action="/exercises/answer">
                     @csrf

@@ -7,6 +7,7 @@ use App\querie;
 use App\People;
 use App\score;
 use DB;
+use Session;
 use Illuminate\Http\Request;
 
 class exercisesController extends Controller
@@ -23,17 +24,15 @@ class exercisesController extends Controller
         $acronyms = People::where('acronym', '=' , $request->acronym)->get();
         foreach ($acronyms as $acronym)
         {
-
-            
             $scores = score::where('people_id', '=', $acronym->id)->where('querie_id', '=', $request->question)->get(); //Select the score of the user being updated
-            if($scores == '[]') //Create a new entry 
+            if($scores == '[]') //Create a new entry
             {
                 $prev_question = $request->question -1;
                 $prev_question = score::where('people_id', '=', $acronym->id)->where('querie_id', '=', $prev_question)->get(); //Select the previos question
-                
-                if($prev_question == '[]' && $request->question > 1) //Disallow the user to answer to a question if he didn't tried the previous question 
+
+                if($prev_question == '[]' && $request->question > 1) //Disallow the user to answer to a question if he didn't tried the previous question
                 {
-                    $error = "Essayez de répondre aux questions précédents avant celle-ci";
+                    Session::flash('Error', 'Essayez de répondre aux questions précédents avant celle-ci');
                 }
                 else // Allow the user to send his answer
                 {
@@ -44,7 +43,7 @@ class exercisesController extends Controller
                     $newscore->querie_id = $request->question;
                     $newscore->save();
 
-                    $error = "La participation à la question a été crée, veuillez valider une deuxième fois la question";
+                    Session::flash('Error', 'La participation à la question a été crée, veuillez valider une deuxième fois la question');
                 }
             }
             else //Update an existant entry
@@ -54,27 +53,31 @@ class exercisesController extends Controller
                     if($score->success == false)
                     {
                         $queries = querie::where('order', '=', $request->question)->get();
-                        
+
                         foreach($queries as $querie) //Watch the query corresponding to the question answered by the user
                         {
 
                             try //try to execute a query, if it's not working, the db is probably not created
                             {
-                                DB::select($querie->statement);                                
+                                DB::select($querie->statement);
                             }
                             catch(\Exception $e) //create DB with query given by the teacher
                             {
                                 $exercises = exercise::where('id', '=', $querie->exercise_id)->get();
                                 foreach($exercises as $exercise)
                                 {
-                                    DB::select($exercise->statement);
+                                    $str_arr = explode(";", $exercise->statement); //Split beetwen each ";"
+                                    foreach ($str_arr as $key=>$value) { //If there is data, it will be created
+                                        if($value != '') //Sometimes it sends spaces, it prevents to return an error
+                                        DB::select($value);
+                                    }
                                 }
                             }
 
                             try //Syntax corect ?
                             {
-                                $teacherquery = DB::select($querie->statement); //Syntax of the teacher 
-                                $studentquery = DB::select($request->answer); //Syntax of the student 
+                                $teacherquery = DB::select($querie->statement); //Syntax of the teacher
+                                $studentquery = DB::select($request->answer); //Syntax of the student
 
                                 if($teacherquery == $studentquery) //Compare the result of the 2 queries, if this is the same, the student has the right answer
                                 {
@@ -85,7 +88,7 @@ class exercisesController extends Controller
                                             'attempts'  =>  $newattemp,
                                             'success'   =>  1]);
                                 }
-                                else 
+                                else
                                 {
                                     $newattemp = $score->attempts +1;
                                         score::where('people_id', '=', $acronym->id)
@@ -99,17 +102,17 @@ class exercisesController extends Controller
                                     score::where('people_id', '=', $acronym->id)
                                     ->where('querie_id', '=', $request->question)
                                     ->update(['attempts' => $newattemp]);
-                                $error = "Syntaxe incorrecte";
+                                Session::flash('Error', 'Syntaxe incorrecte');
                             }
-                        }                        
+                        }
                     }
                     else //Permission denied to update the number of attemps. The user has find the right answer
                     {
-                        $error = "La réponse est déjà correcte";
+                        Session::flash('Error', 'La réponse est déjà correcte');
                     }
-                } 
+                }
             }
         }
-            return redirect('exercises')->with('error', $error);
+            return redirect('exercises');
     }
 }
