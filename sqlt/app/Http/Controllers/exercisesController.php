@@ -10,6 +10,14 @@ use DB;
 use Session;
 use Illuminate\Http\Request;
 
+// TODO: Vérifier l'acronyme
+// TODO: Valider directement la réponse de l'utilisateur
+// TODO: Mettre à jour le CSS
+// TODO: Permettre de faire du CRUD dans la base de donnée à l'aide des "transactions". Cette option était disponible masi je ne savais pas comment comparé deux requêtes qui permettent de "créer/supprimer/modifier" une entrée
+// TODO: Gérer plusieurs questionnaires
+// TODO: Permetre de gérer les classes et les élèves
+// TODO: Permetre d'ajouter manuellement les exercices
+
 class exercisesController extends Controller
 {
     public function index(){
