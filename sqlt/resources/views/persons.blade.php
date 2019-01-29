@@ -65,30 +65,28 @@
     </head>
     <body>
         <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
+            <div class="top-right links">
+                <a href="/">Home</a>
+            </div>
 
             <div class="content">
                 <div class="title m-b-md">
-                    SQLTeacher
+                    SQLApp
                 </div>
-
-                <div class="links">
-                    <a href="/persons">Personnes</a>
-                    <a href="/exercises">Exercices</a>
-                    <a href="/management">Gestion des exercices</a>
-                </div>
+                <table>
+                    <th>
+                        Professeurs & élèves
+                    </th>
+                    @foreach($datapersons as $dataperson)
+                    <tr>
+                        <td>{{ $dataperson->id }}</td>
+                        <td>{{ $dataperson->firstname }}</td>
+                        <td>{{ $dataperson->lastname }}</td>
+                        <td>{{ $dataperson->email }}</td>
+                        <td>{{ $dataperson->acronym }}</td>
+                    </tr>
+                    @endforeach
+                </table>
             </div>
         </div>
     </body>
