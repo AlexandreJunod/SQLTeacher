@@ -7,6 +7,11 @@ use App\score;
 use Session;
 use Illuminate\Http\Request;
 
+// TODO: Afficher une dropdown pour choisir la classe de l'éléve
+// TODO: Ajouter un bouton "est prof" afin de passé le role à "2" qui veut dire "Enseignant"
+// TODO: Ajouter un bouton pour supprimer les données de la table Scores
+// TODO: Faire une page similiaire pour les questions/exercices. Ajouter une attribution d'exercice à une certaine classe
+
 class peopleController extends Controller
 {
     public function index(){
