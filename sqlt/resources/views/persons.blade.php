@@ -61,6 +61,11 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+
+            td {
+                padding: 15px;
+                border-bottom: 1px solid #ddd;
+            }
         </style>
     </head>
     <body>
@@ -73,19 +78,41 @@
                 <div class="title m-b-md">
                     SQLApp
                 </div>
+                @if(Session::has('Error'))
+                  <h3>{{ Session::get('Error') }}</h3>
+                @endif
                 <table>
                     <th>
                         Professeurs & élèves
                     </th>
+                    <form method="post" action="/persons/crud">
+                    @csrf
+                    <tr>
+                        <td><input type="text" name="firstname" placeholder="Prenom"></td>
+                        <td><input type="text" name="lastname" placeholder="Nom"></td>
+                        <td><input type="text" name="email" placeholder="Email"></td>
+                        <td><input type="text" name="acronym" placeholder="Acronyme"></td>
+                        <td><button name="create">Ajouter</button></td>
+                    </tr>
                     @foreach($datapersons as $dataperson)
                     <tr>
-                        <td>{{ $dataperson->id }}</td>
-                        <td>{{ $dataperson->firstname }}</td>
-                        <td>{{ $dataperson->lastname }}</td>
-                        <td>{{ $dataperson->email }}</td>
-                        <td>{{ $dataperson->acronym }}</td>
+                        @if(isset($toUpdate) && $toUpdate == $dataperson->id)
+                            <td><input type="text" name="firstname" placeholder="{{ $dataperson->firstname }}"></td>
+                            <td><input type="text" name="lastname" placeholder="{{ $dataperson->lastname }}"></td>
+                            <td><input type="text" name="email" placeholder="{{ $dataperson->email }}"></td>
+                            <td><input type="text" name="acronym" placeholder="{{ $dataperson->acronym }}"></td>
+                            <td><button name="confirm" value="{{ $dataperson->id }}">Valider</button></td>
+                        @else
+                            <td>{{ $dataperson->firstname }}</td>
+                            <td>{{ $dataperson->lastname }}</td>
+                            <td>{{ $dataperson->email }}</td>
+                            <td>{{ $dataperson->acronym }}</td>
+                            <td><button name="update" value="{{ $dataperson->id }}">Modifier</button></td>
+                            <td><button name="delete" value="{{ $dataperson->id }}">Supprimer</button></td>
+                        @endif
                     </tr>
                     @endforeach
+                    </form>
                 </table>
             </div>
         </div>

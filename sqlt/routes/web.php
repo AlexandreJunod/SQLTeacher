@@ -16,6 +16,7 @@ Route::get('/', function () {
 });
 
 Route::get('/persons', 'peopleController@index');
+Route::post('/persons/crud', 'peopleController@crud');
 Route::get('/exercises', 'exercisesController@index');
 Route::post('/exercises/answer', 'exercisesController@correct');
 Route::get('/management', 'managementController@index');

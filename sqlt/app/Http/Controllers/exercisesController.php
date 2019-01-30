@@ -30,7 +30,7 @@ class exercisesController extends Controller
         $acronyms = People::where('acronym', '=' , $request->acronym)->get();
         if($acronyms == '[]') //This acronym doesn't exists
         {
-            Session::flash('Error', 'Accronyme inexistant');
+            Session::flash('Error', 'Acronyme inexistant');
             return redirect('exercises');
         }
 
