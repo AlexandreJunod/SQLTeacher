@@ -90,7 +90,7 @@
                     <tr>
                         <td><input type="text" name="firstname" placeholder="Prenom"></td>
                         <td><input type="text" name="lastname" placeholder="Nom"></td>
-                        <td><input type="text" name="email" placeholder="Email"></td>
+                        <td><input type="email" name="email" placeholder="Email"></td>
                         <td><input type="text" name="acronym" placeholder="Acronyme"></td>
                         <td><button name="create">Ajouter</button></td>
                     </tr>
@@ -99,7 +99,7 @@
                         @if(isset($toUpdate) && $toUpdate == $dataperson->id)
                             <td><input type="text" name="firstname" placeholder="{{ $dataperson->firstname }}"></td>
                             <td><input type="text" name="lastname" placeholder="{{ $dataperson->lastname }}"></td>
-                            <td><input type="text" name="email" placeholder="{{ $dataperson->email }}"></td>
+                            <td><input type="email" name="email" placeholder="{{ $dataperson->email }}"></td>
                             <td><input type="text" name="acronym" placeholder="{{ $dataperson->acronym }}"></td>
                             <td><button name="confirm" value="{{ $dataperson->id }}">Valider</button></td>
                         @else
