@@ -25,7 +25,6 @@ class exercisesController extends Controller
         $scores = score::with(['People', 'querie'])->orderBy('querie_id')->get();
         return view('exercises')->with('exercises', $exercises)->with('peoples', $peoples)->with('scores', $scores);
     }
-
     public function correct(Request $request)
     {
         $acronyms = People::where('acronym', '=' , $request->acronym)->get();
@@ -34,7 +33,6 @@ class exercisesController extends Controller
             $scores = score::where('people_id', '=', $acronym->id)->where('querie_id', '=', $request->question)->get(); //Select the score of the user being updated
             $prev_question = $request->question -1;
             $prev_question = score::where('people_id', '=', $acronym->id)->where('querie_id', '=', $prev_question)->get(); //Select the previos question
-
             if($prev_question == '[]' && $request->question > 1) //Disallow the user to answer to a question if he didn't tried the previous question
             {
                 Session::flash('Error', 'Essayez de répondre aux questions précédents avant celle-ci');
@@ -44,16 +42,13 @@ class exercisesController extends Controller
                 $scores = array(0);
                 $scoreisset = 0;
             }
-
             foreach($scores as $score)
             {
                 if($scoreisset == 0 || $score->success == false)
                 {
                     $queries = querie::where('order', '=', $request->question)->get();
-
                     foreach($queries as $querie) //Watch the query corresponding to the question answered by the user
                     {
-
                         try //try to execute a query, if it's not working, the db is probably not created
                         {
                             DB::select($querie->statement);
@@ -70,12 +65,10 @@ class exercisesController extends Controller
                                 }
                             }
                         }
-
                         try //Query or syntax correct ?
                         {
                             $teacherquery = DB::select($querie->statement); //Syntax of the teacher
                             $studentquery = DB::select($request->answer); //Syntax of the student
-
                             if($teacherquery == $studentquery) //Compare the result of the 2 queries, if this is the same, the student has the right answer
                             {
                                 if($scoreisset == 0) //Create a new entry if he hasn't a score yet
