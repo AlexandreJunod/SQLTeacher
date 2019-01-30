@@ -72,7 +72,19 @@ class peopleController extends Controller
 
         if(isset($request->firstname) && isset($request->lastname) && isset($request->email) && isset($request->acronym))
         {
-            dd("create");
+            try {
+                $newperson = new People;
+                $newperson->firstname = $request->firstname;
+                $newperson->lastname = $request->lastname;
+                $newperson->email = $request->email;
+                $newperson->acronym =$request->acronym;
+                $newperson->classe_id = '1';
+                $newperson->role_id = '1';
+                $newperson->save();
+                return redirect('persons');
+            } catch (\Exception $e) {
+                Session::flash("Error", "Données non compatibles");
+            }
         }
         else
         {
