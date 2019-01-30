@@ -10,7 +10,6 @@ use DB;
 use Session;
 use Illuminate\Http\Request;
 
-// TODO: Vérifier l'acronyme
 // TODO: Mettre à jour le CSS
 // TODO: Permettre de faire du CRUD dans la base de donnée à l'aide des "transactions". Cette option était disponible masi je ne savais pas comment comparé deux requêtes qui permettent de "créer/supprimer/modifier" une entrée
 // TODO: Gérer plusieurs questionnaires
@@ -25,10 +24,23 @@ class exercisesController extends Controller
         $scores = score::with(['People', 'querie'])->orderBy('querie_id')->get();
         return view('exercises')->with('exercises', $exercises)->with('peoples', $peoples)->with('scores', $scores);
     }
-    
+
     public function correct(Request $request)
     {
         $acronyms = People::where('acronym', '=' , $request->acronym)->get();
+        if($acronyms == '[]') //This acronym doesn't exists
+        {
+            Session::flash('Error', 'Accronyme inexistant');
+            return redirect('exercises');
+        }
+
+        $nbquestions = Querie::count('id');
+        if($nbquestions < $request->question)
+        {
+            Session::flash('Error', "Cette question n'existe pas");
+            return redirect('exercises');
+        }
+
         foreach ($acronyms as $acronym)
         {
             $scores = score::where('people_id', '=', $acronym->id)->where('querie_id', '=', $request->question)->get(); //Select the score of the user being updated
@@ -103,7 +115,7 @@ class exercisesController extends Controller
                                     score::where('people_id', '=', $acronym->id)
                                     ->where('querie_id', '=', $request->question)
                                     ->update(['attempts' => $newattemp]);
-                                Session::flash('Error', 'Syntaxe incorrecte');
+                                Session::flash('Error', 'Requête ou syntaxe incorrecte');
                             }
                         }
                     }
@@ -114,6 +126,6 @@ class exercisesController extends Controller
                 }
             }
         }
-            return redirect('exercises');
+        return redirect('exercises');
     }
 }
