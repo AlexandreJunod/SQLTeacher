@@ -81,7 +81,13 @@
             <div class="content">
                 @foreach($exercises as $exercise)
                     <h2>{{ $exercise->title }}</h2>
-                    <p style="color:mediumblue;">Création de la table : {{ $exercise->db_script }}</p>
+                    <p>
+                        <h3 style="color:mediumblue;">Création de la table :</h3>
+                        <form action="/exercises/download/{{$id}}" method="post">
+                        @csrf
+                        <button name="download">Télécharger</button>
+                        </form>
+                    </p>
                     <table>
                     <tr>
                         <th>N°</th>

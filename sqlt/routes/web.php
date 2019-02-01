@@ -16,5 +16,6 @@ Route::get('/persons', 'peopleController@index');
 Route::post('/persons/crud', 'peopleController@crud');
 Route::get('/exercises/{id}', 'exercisesController@index');
 Route::post('/exercises/answer/{id}', 'exercisesController@correct');
+Route::post('/exercises/download/{id}', 'exercisesController@download');
 Route::get('/management', 'managementController@index');
 Route::post('/management/crud', 'managementController@crud');

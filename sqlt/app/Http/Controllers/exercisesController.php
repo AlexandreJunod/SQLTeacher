@@ -25,6 +25,25 @@ class exercisesController extends Controller
         return view('exercises')->with('exercises', $exercises)->with('peoples', $peoples)->with('scores', $scores)->with('id', $id);
     }
 
+    public function download($id){
+        $myscripts = exercise::where('id', '=', $id)->get();
+        foreach ($myscripts as $myscript) {
+            try{
+                $my_file = 'script.txt';
+                $handle = fopen($my_file, 'w') or die('Cannot open file:  '.$my_file); //implicitly creates file
+                $data = $myscript->db_script;
+                fwrite($handle, $data);
+                unlink($my_file);
+                //header("..\..\..\public\script.txt");
+            }
+            catch(\Exception $e)
+            {
+                Session::flash('Error', 'Problème lors de la création du fichier');
+            }
+        }
+        return redirect('exercises/'.$id);
+    }
+
     public function correct(Request $request, $id)
     {
         $acronyms = People::where('acronym', '=' , $request->acronym)->get();
