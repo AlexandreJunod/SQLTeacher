@@ -86,8 +86,17 @@
 
                 <div class="links">
                     <a href="/persons">Personnes</a>
-                    <a href="/exercises">Exercices</a>
                     <a href="/management">Gestion des exercices</a>
+                </div>
+                <div style="margin-top:30px">
+                    <table>
+                        <th>Exercices</th>
+                        @foreach($exercises as $exercise)
+                            <tr>
+                                <td><a href="/exercises/$exercise->id">{{ $exercise->title }}</a></td>
+                            </tr>
+                        @endforeach
+                    </table>
                 </div>
             </div>
         </div>

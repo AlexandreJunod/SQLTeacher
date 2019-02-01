@@ -11,10 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get('/', 'homeController@index');
 Route::get('/persons', 'peopleController@index');
 Route::post('/persons/crud', 'peopleController@crud');
 Route::get('/exercises', 'exercisesController@index');
