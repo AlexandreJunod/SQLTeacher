@@ -74,14 +74,14 @@ class exercisesController extends Controller
                         {
                             try //try to execute a query, if it's not working, the db is probably not created
                             {
-                                DB::select($querie->statement);
+                                DB::select($querie->db_script);
                             }
                             catch(\Exception $e) //create DB with query given by the teacher
                             {
                                 $exercises = exercise::where('id', '=', $querie->exercise_id)->get();
                                 foreach($exercises as $exercise)
                                 {
-                                    $str_arr = explode(";", $exercise->statement); //Split beetwen each ";"
+                                    $str_arr = explode(";", $exercise->db_script); //Split beetwen each ";"
                                     foreach ($str_arr as $key=>$value) { //If there is data, it will be created
                                         if($value != '') //Sometimes it sends spaces, it prevents to return an error
                                         DB::select($value);
@@ -90,7 +90,7 @@ class exercisesController extends Controller
                             }
                             try //Syntax corect ?
                             {
-                                $teacherquery = DB::select($querie->statement); //Syntax of the teacher
+                                $teacherquery = DB::select($querie->db_script); //Syntax of the teacher
                                 $studentquery = DB::select($request->answer); //Syntax of the student
                                 if($teacherquery == $studentquery) //Compare the result of the 2 queries, if this is the same, the student has the right answer
                                 {

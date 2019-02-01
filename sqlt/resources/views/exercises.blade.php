@@ -80,8 +80,8 @@
 
             <div class="content">
                 @foreach($exercises as $exercise)
-                    <h2>{{ $exercise->description }}</h2>
-                    <p style="color:mediumblue;">Création de la table : {{ $exercise->statement }}</p>
+                    <h2>{{ $exercise->title }}</h2>
+                    <p style="color:mediumblue;">Création de la table : {{ $exercise->db_script }}</p>
                     <table>
                     <tr>
                         <th>N°</th>

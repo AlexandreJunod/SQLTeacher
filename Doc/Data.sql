@@ -17,7 +17,7 @@ INSERT INTO `SQLTeacher`.`people`(`firstName`, `lastName`, `email`, `acronym`, `
 INSERT INTO `SQLTeacher`.`people`(`firstName`, `lastName`, `email`, `acronym`, `classe_id`, `role_id`) VALUES ('Miguel', 'SOARES', 'Miguel.SOARES@cpnv.ch', 'MSS', '1', '1');
 INSERT INTO `SQLTeacher`.`people`(`firstName`, `lastName`, `email`, `acronym`, `classe_id`, `role_id`) VALUES ('Johnny', 'VAVA-JARAMILLO', 'Johnny.VACA-JARAMILLO@cpnv.ch', 'JVO', '1', '1');
 
-INSERT INTO `SQLTeacher`.`exercises` (`statement`, `description`) VALUES ("CREATE TABLE tutorials_tbl(id INT NOT NULL AUTO_INCREMENT,title VARCHAR(100) NOT NULL,author VARCHAR(40) NOT NULL,PRIMARY KEY ( id ));
+INSERT INTO `SQLTeacher`.`exercises` (`db_script`, `title`) VALUES ("CREATE TABLE tutorials_tbl(id INT NOT NULL AUTO_INCREMENT,title VARCHAR(100) NOT NULL,author VARCHAR(40) NOT NULL,PRIMARY KEY ( id ));
 INSERT INTO `sqlteacher`.`tutorials_tbl` (`title`, `author`) VALUES('Examen', 'Enseignant');
 INSERT INTO `sqlteacher`.`tutorials_tbl` (`title`, `author`) VALUES('Test', 'Elève');", 'Table test');
 
