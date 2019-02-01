@@ -14,6 +14,6 @@
 Route::get('/', 'homeController@index');
 Route::get('/persons', 'peopleController@index');
 Route::post('/persons/crud', 'peopleController@crud');
-Route::get('/exercises', 'exercisesController@index');
-Route::post('/exercises/answer', 'exercisesController@correct');
+Route::get('/exercises/{id}', 'exercisesController@index');
+Route::post('/exercises/answer/{id}', 'exercisesController@correct');
 Route::get('/management', 'managementController@index');

@@ -93,7 +93,7 @@
                         <th>Exercices</th>
                         @foreach($exercises as $exercise)
                             <tr>
-                                <td><a href="/exercises/$exercise->id">{{ $exercise->title }}</a></td>
+                                <td><a href="/exercises/{{$exercise->id}}">{{ $exercise->title }}</a></td>
                             </tr>
                         @endforeach
                     </table>

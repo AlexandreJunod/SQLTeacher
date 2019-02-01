@@ -18,114 +18,119 @@ use Illuminate\Http\Request;
 
 class exercisesController extends Controller
 {
-    public function index(){
-        $exercises = exercise::all();
+    public function index($id){
+        $exercises = exercise::where('id', '=', $id)->get();
         $peoples = People::all();
         $scores = score::with(['People', 'querie'])->orderBy('querie_id')->get();
-        return view('exercises')->with('exercises', $exercises)->with('peoples', $peoples)->with('scores', $scores);
+        return view('exercises')->with('exercises', $exercises)->with('peoples', $peoples)->with('scores', $scores)->with('id', $id);
     }
 
-    public function correct(Request $request)
+    public function correct(Request $request, $id)
     {
         $acronyms = People::where('acronym', '=' , $request->acronym)->get();
         if($acronyms == '[]') //This acronym doesn't exists
         {
             Session::flash('Error', 'Acronyme inexistant');
-            return redirect('exercises');
+            return redirect('exercises/'.$id);
         }
 
-        $nbquestions = Querie::count('id');
+        $nbquestions = Querie::where('exercise_id', '=', $id)->count('id');
         if($nbquestions < $request->question)
         {
             Session::flash('Error', "Cette question n'existe pas");
-            return redirect('exercises');
+            return redirect('exercises/'.$id);
         }
 
         foreach ($acronyms as $acronym)
         {
-            $scores = score::where('people_id', '=', $acronym->id)->where('querie_id', '=', $request->question)->get(); //Select the score of the user being updated
-            if($scores == '[]') //Create a new entry
+            $questions = querie::where('exercise_id', '=', $id)->where('order', '=', $request->question)->get();
+            foreach ($questions as $question)
             {
-                $prev_question = $request->question -1;
-                $prev_question = score::where('people_id', '=', $acronym->id)->where('querie_id', '=', $prev_question)->get(); //Select the previos question
-                if($prev_question == '[]' && $request->question > 1) //Disallow the user to answer to a question if he didn't tried the previous question
+                $scores = score::where('people_id', '=', $acronym->id)->where('querie_id', '=', $question->id)->get(); //Select the score of the user being updated
+
+                if($scores == '[]') //Create a new entry
                 {
-                    Session::flash('Error', 'Essayez de répondre aux questions précédents avant celle-ci');
-                }
-                else // Allow the user to send his answer
-                {
-                    $newscore = new score;
-                    $newscore->success = '0';
-                    $newscore->attempts = '0';
-                    $newscore->people_id = $acronym->id;
-                    $newscore->querie_id = $request->question;
-                    $newscore->save();
-                    Session::flash('Error', 'La participation à la question a été crée, veuillez valider une deuxième fois la question');
-                }
-            }
-            else //Update an existant entry
-            {
-                foreach($scores as $score)
-                {
-                    if($score->success == false)
+                    $prev_question = $request->question -1;
+                    $prev_question = score::where('people_id', '=', $acronym->id)->where('querie_id', '=', $prev_question)->get(); //Select the previos question
+                    if($prev_question == '[]' && $request->question > 1) //Disallow the user to answer to a question if he didn't tried the previous question
                     {
-                        $queries = querie::where('order', '=', $request->question)->get();
-                        foreach($queries as $querie) //Watch the query corresponding to the question answered by the user
+                        Session::flash('Error', 'Essayez de répondre aux questions précédents avant celle-ci');
+                    }
+                    else // Allow the user to send his answer
+                    {
+                        $newscore = new score;
+                        $newscore->success = '0';
+                        $newscore->attempts = '0';
+                        $newscore->people_id = $acronym->id;
+                        $newscore->querie_id = $question->id;
+                        $newscore->save();
+                        Session::flash('Error', 'La participation à la question a été crée, veuillez valider une deuxième fois la question');
+                    }
+                }
+                else //Update an existant entry
+                {
+                    foreach($scores as $score)
+                    {
+                        if($score->success == false)
                         {
-                            try //try to execute a query, if it's not working, the db is probably not created
+                            $queries = querie::where('exercise_id', '=', $id)->where('order', '=', $request->question)->get();
+                            foreach($queries as $querie) //Watch the query corresponding to the question answered by the user
                             {
-                                DB::select($querie->db_script);
-                            }
-                            catch(\Exception $e) //create DB with query given by the teacher
-                            {
-                                $exercises = exercise::where('id', '=', $querie->exercise_id)->get();
-                                foreach($exercises as $exercise)
+                                try //try to execute a query, if it's not working, the db is probably not created
                                 {
-                                    $str_arr = explode(";", $exercise->db_script); //Split beetwen each ";"
-                                    foreach ($str_arr as $key=>$value) { //If there is data, it will be created
-                                        if($value != '') //Sometimes it sends spaces, it prevents to return an error
-                                        DB::select($value);
+                                    DB::select($querie->statement);
+                                }
+                                catch(\Exception $e) //create DB with query given by the teacher
+                                {
+                                    $exercises = exercise::where('id', '=', $querie->exercise_id)->get();
+                                    foreach($exercises as $exercise)
+                                    {
+                                        $str_arr = explode(";", $exercise->db_script); //Split beetwen each ";"
+                                        foreach ($str_arr as $key=>$value) { //If there is data, it will be created
+                                            if($value != '') //Sometimes it sends spaces, it prevents to return an error
+                                            DB::select($value);
+                                        }
                                     }
                                 }
-                            }
-                            try //Syntax corect ?
-                            {
-                                $teacherquery = DB::select($querie->db_script); //Syntax of the teacher
-                                $studentquery = DB::select($request->answer); //Syntax of the student
-                                if($teacherquery == $studentquery) //Compare the result of the 2 queries, if this is the same, the student has the right answer
+                                try //Syntax corect ?
                                 {
-                                    $newattemp = $score->attempts +1;
-                                        score::where('people_id', '=', $acronym->id)
-                                        ->where('querie_id', '=', $request->question)
-                                        ->update([
-                                            'attempts'  =>  $newattemp,
-                                            'success'   =>  1]);
+                                    $teacherquery = DB::select($querie->statement); //Syntax of the teacher
+                                    $studentquery = DB::select($request->answer); //Syntax of the student
+                                    if($teacherquery == $studentquery) //Compare the result of the 2 queries, if this is the same, the student has the right answer
+                                    {
+                                        $newattemp = $score->attempts +1;
+                                            score::where('people_id', '=', $acronym->id)
+                                            ->where('querie_id', '=', $question->id)
+                                            ->update([
+                                                'attempts'  =>  $newattemp,
+                                                'success'   =>  1]);
+                                    }
+                                    else
+                                    {
+                                        $newattemp = $score->attempts +1;
+                                            score::where('people_id', '=', $acronym->id)
+                                            ->where('querie_id', '=', $question->id)
+                                            ->update(['attempts' => $newattemp]);
+                                    }
                                 }
-                                else
+                                catch(\Exception $e)
                                 {
                                     $newattemp = $score->attempts +1;
                                         score::where('people_id', '=', $acronym->id)
-                                        ->where('querie_id', '=', $request->question)
+                                        ->where('querie_id', '=', $question->id)
                                         ->update(['attempts' => $newattemp]);
+                                    Session::flash('Error', 'Requête ou syntaxe incorrecte');
                                 }
-                            }
-                            catch(\Exception $e)
-                            {
-                                $newattemp = $score->attempts +1;
-                                    score::where('people_id', '=', $acronym->id)
-                                    ->where('querie_id', '=', $request->question)
-                                    ->update(['attempts' => $newattemp]);
-                                Session::flash('Error', 'Requête ou syntaxe incorrecte');
                             }
                         }
-                    }
-                    else //Permission denied to update the number of attemps. The user has find the right answer
-                    {
-                        Session::flash('Error', 'La réponse est déjà correcte');
+                        else //Permission denied to update the number of attemps. The user has find the right answer
+                        {
+                            Session::flash('Error', 'La réponse est déjà correcte');
+                        }
                     }
                 }
             }
+            return redirect('exercises/'.$id);
         }
-        return redirect('exercises');
     }
 }

@@ -98,7 +98,7 @@
                 <h2>Soumettre une réponse</h2>
                 <h3>{{Session::get('Error')}}</h3> <!-- Show error msg -->
                 <table>
-                    <form method="post" action="/exercises/answer">
+                    <form method="post" action="/exercises/answer/{{$id}}">
                     @csrf
                     <tr>
                         <td>Acronyme</td>
@@ -136,7 +136,7 @@
                         @foreach($scores as $score) <!-- Select all the scores -->
                             @if($people->email == $score->people->email) <!-- Select the score of one person -->
                                 @foreach($exercise->querie as $querie) <!-- Get the number of questions -->
-                                    @if($querie->order == $score->querie->order) <!-- Select one question  -->
+                                    @if($querie->order == $score->querie->order && $score->querie->exercise_id == $id) <!-- Select one question  -->
                                         @if($score->success)
                                             <td><span class="successful" style="background-color:lawngreen">{{ $score->attempts }}</span></td>
                                         @else
